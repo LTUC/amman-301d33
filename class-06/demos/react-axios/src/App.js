@@ -56,10 +56,11 @@ class App extends React.Component {
             <p>latitude: {this.state.locationResult.lat}</p>
             <p>longitude: {this.state.locationResult.lon} </p>
 
-            <img src={`https://maps.locationiq.com/v3/staticmap?key=f5de8e48adbdc6&center=${this.state.locationResult.lat},${this.state.locationResult.lon}&zoom=10`} alt="city" />
+            <img src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_KEY}&center=${this.state.locationResult.lat},${this.state.locationResult.lon}&zoom=10`} alt="city" />
 
           </>
         }
+
 
 
       </div>
