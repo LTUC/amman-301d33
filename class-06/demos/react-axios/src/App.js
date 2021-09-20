@@ -8,7 +8,8 @@ class App extends React.Component {
     this.state = {
       locationResult: {},
       searchQuery: '',
-      showLocInfo: false
+      showLocInfo: false,
+      showError: false
     }
   }
 
@@ -21,20 +22,27 @@ class App extends React.Component {
       searchQuery: e.target.city.value
     })
 
-    console.log('key',process.env.REACT_APP_LOCATIONIQ_KEY);
-    
-    let reqUrl = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_KEY}&q=${this.state.searchQuery}&format=json`;
+    console.log('key', process.env.REACT_APP_LOCATIONIQ_KEY);
 
-    let locResult = await axios.get(reqUrl);
-    console.log('aaaaaaaaaaa', locResult);
-    console.log('bbbbbbbb', locResult.data);
-    console.log('cccccccc', locResult.data[0]);
+    try {
+      let reqUrl = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_KEY}&q=${this.state.searchQuery}&format=json`;
 
-
-    this.setState({
-      locationResult: locResult.data[0],
-      showLocInfo: true
-    })
+      let locResult = await axios.get(reqUrl);
+      console.log('aaaaaaaaaaa', locResult);
+      console.log('bbbbbbbb', locResult.data);
+      console.log('cccccccc', locResult.data[0]);
+      this.setState({
+        locationResult: locResult.data[0],
+        showLocInfo: true,
+        showError:false
+      })
+    } catch {
+      console.log('something went wrong')
+      this.setState({
+        showError: true,
+        showLocInfo:false
+      })
+    }
 
 
   }
@@ -59,6 +67,10 @@ class App extends React.Component {
             <img src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_KEY}&center=${this.state.locationResult.lat},${this.state.locationResult.lon}&zoom=10`} alt="city" />
 
           </>
+        }
+
+        {this.state.showError &&
+          <p>Something went wrong in getting location data</p>
         }
 
 
